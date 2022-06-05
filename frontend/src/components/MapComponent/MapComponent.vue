@@ -7,7 +7,7 @@
 <script>
 import { GChart } from "vue-google-charts/legacy";
 import { chartType, chartOptions } from "./GoogleChartData";
-import supabase from "@/api/supabase";
+import axios from 'axios'
 
 export default {
   name: "MapComponent",
@@ -25,18 +25,11 @@ export default {
     };
   },
   methods: {
-    async getDataMap() {
-      const { data, error } = await supabase.from("Covid-cases").select("*");
-
-      if (error) {
-        console.log(error);
-        return;
-      }
-      console.log(data[0]);
-      this.data = [
-        ["Country", "Covid"],
-        [data[0].location, data[0].num_sequences_total],
-      ];
+    getDataMap() {
+      axios.get('http://localhost:3000/covid-cases?date=2020-07-06').then(res => {
+        console.log(res.data)
+        this.data = [["Country", "Cases"],[res.data[0].location, res.data[0].num_sequences_total]]
+      })  
     },
   },
   mounted() {
