@@ -1,41 +1,71 @@
 <template>
   <div class="map">
-    <GChart :type="type" :data="data" :options="options" :settings="settings" />
+    <div id="map">
+      <InfoComponent :country="mapLocal" :variantsCases="countryWithCases"/>
+    </div>
   </div>
 </template>
 
 <script>
-import { GChart } from "vue-google-charts/legacy";
-import { chartType, chartOptions } from "./GoogleChartData";
-import axios from 'axios'
+import jsVectorMap from "jsvectormap";
+import "jsvectormap/dist/maps/world-merc";
+import InfoComponent from "../InfoComponent.vue";
 
 export default {
   name: "MapComponent",
   components: {
-    GChart,
+    // GChart,
+    InfoComponent,
   },
   data() {
     return {
-      type: chartType,
-      data: [],
-      options: chartOptions,
-      settings: {
-        packages: ["geochart"],
-      },
+      map: {},
+      countryWithCases: [],
+      mapLocal: ''
     };
   },
-  methods: {
-    getDataMap() {
-      axios.get('http://localhost:3000/covid-cases?date=2020-07-06').then(res => {
-        console.log(res.data)
-        this.data = [["Country", "Cases"],[res.data[0].location, res.data[0].num_sequences_total]]
-      })  
-    },
-  },
   mounted() {
-    this.getDataMap();
+    this.map = new jsVectorMap({
+      selector: "#map",
+      map: "world_merc",
+      zoomOnScroll: false,
+      zoomButtons: false,
+      onRegionTooltipShow: (e) => {
+        this.$store.commit("setCountry", e._tooltip.innerText);
+
+        if (this.cases) {
+          this.cases.forEach((element) => {
+            if(element[0] == this.country) {
+              this.mapLocal = element[0]
+              this.countryWithCases = element
+            }
+          });
+        }
+
+        console.log(this.countryWithCases)
+      },
+    });
+  },
+  computed: {
+    cases() {
+      return this.$store.state.cases;
+    },
+    country() {
+      return this.$store.state.country;
+    },
   },
 };
 </script>
 
-<style></style>
+<style>
+.map {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#map {
+  width: 95vw;
+  height: 80vh;
+}
+</style>
