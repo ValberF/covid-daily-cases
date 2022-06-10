@@ -1,5 +1,9 @@
 # covid-daily-cases
 
+## Description
+
+The project aims to display the number of variants of Covid 19, in each country, date or the amount accumulated until the chosen date.
+
 ## Project setup
 ```
 cd frontend
