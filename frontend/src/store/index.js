@@ -1,25 +1,26 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from "vue";
+import Vuex from "vuex";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     cases: [],
-    country: ''
+    country: "",
+    variants: [],
   },
-  getters: {
-  },
+  getters: {},
   mutations: {
     setCases(state, payload) {
-      state.cases = payload
+      state.cases = payload;
     },
     setCountry(state, payload) {
-      state.country = payload
+      state.country = payload;
+    },
+    setVariants(state, payload) {
+      state.variants = payload;
     },
   },
-  actions: {
-  },
-  modules: {
-  }
-})
+  actions: {},
+  modules: {},
+});
