@@ -1,8 +1,8 @@
 <template>
   <div class="info">
-    <h3>{{ country || "Sem data escolhida ou a data não contém dados" }}</h3>
+    <h3>{{ country || "Sem data escolhida" }}</h3>
     <span v-for="(variant, index) in variants" :key="index">
-      {{ variant }}: {{ variantsCases[index + 1] }}</span
+      {{ variant }}: {{ variantsCases[index + 1] || 'Sem dados'}}</span
     >
   </div>
 </template>
@@ -29,7 +29,7 @@ export default {
   flex-direction: column;
   align-items: flex-start;
 
-  width: 180px;
+  width: 200px;
   height: 550px;
   bottom: 150px;
 

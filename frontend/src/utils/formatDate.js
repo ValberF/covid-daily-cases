@@ -1,4 +1,4 @@
-export function formatDate(date) {
+function formatDate(date) {
   date = date.split("T");
   date = date[0];
   date = date.split("-");
@@ -6,3 +6,5 @@ export function formatDate(date) {
 
   return date;
 }
+
+module.exports = { formatDate }

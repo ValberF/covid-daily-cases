@@ -10,6 +10,8 @@
 import InfoComponent from "./InfoComponent.vue";
 import jsVectorMap from "jsvectormap";
 import "jsvectormap/dist/maps/world-merc";
+import { variantsObject } from "@/utils/variants";
+import axios from "axios";
 
 export default {
   name: "MapComponent",
@@ -22,6 +24,7 @@ export default {
       map: {},
       countryWithCases: [],
       mapLocal: "",
+      variantsLocal: {},
     };
   },
   methods: {
@@ -34,6 +37,33 @@ export default {
           }
         });
       }
+    },
+    getCountry(country, date) {
+      let auxArray = [];
+      this.mapLocal = country
+      // const auxObj = variantsObject;
+      axios
+        .get(`http://localhost:3000/covid-cases?location=${country}`)
+        .then((res) => {
+          for (let i = 0; i < res.data.length; ) {
+            if (res.data[i].date <= date) {
+              for (const [key] of Object.entries(variantsObject)) {
+                variantsObject[key] += res.data[i].num_sequences_total;
+                i++;
+              }
+            } else {
+              break;
+            }
+          }
+
+          for (const [key] of Object.entries(variantsObject)) {
+            auxArray.push(variantsObject[key]);
+            variantsObject[key] = 0;
+          }
+
+          console.log(auxArray)
+          this.countryWithCases = auxArray;
+        });
     },
   },
   mounted() {
@@ -48,7 +78,12 @@ export default {
       },
       onRegionTooltipShow: (e) => {
         this.$store.commit("setCountry", e._tooltip.innerText);
-        this.setCountry();
+
+        if (this.flagAccumulated) {
+          this.getCountry(e._tooltip.innerText, this.globalDate);
+        } else {
+          this.setCountry();
+        }
       },
     });
   },
@@ -58,6 +93,12 @@ export default {
     },
     country() {
       return this.$store.state.country;
+    },
+    globalDate() {
+      return this.$store.state.globalDate;
+    },
+    flagAccumulated() {
+      return this.$store.state.flagAccumulated;
     },
   },
 };
@@ -70,6 +111,7 @@ export default {
   align-items: center;
   background-color: rgb(44, 41, 41);
   border-radius: 10px;
+  padding: 15px 0;
 }
 
 #map {

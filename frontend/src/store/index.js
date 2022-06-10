@@ -8,6 +8,8 @@ export default new Vuex.Store({
     cases: [],
     country: "",
     variants: [],
+    globalDate: "",
+    flagAccumulated: false,
   },
   getters: {},
   mutations: {
@@ -19,6 +21,12 @@ export default new Vuex.Store({
     },
     setVariants(state, payload) {
       state.variants = payload;
+    },
+    setGlobalDate(state, payload) {
+      state.globalDate = payload;
+    },
+    setFlagAccumulated(state, payload) {
+      state.flagAccumulated = payload;
     },
   },
   actions: {},
