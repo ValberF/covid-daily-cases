@@ -40,6 +40,10 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 * axios ^0.27.2
 * vuex ^3.6.2
 
+## Software Presentation
+
+https://www.loom.com/share/8ac2a9f602264b2c9f1e9f3e65b0d98f
+
 ## Reference 
 
 >This is a challenge by [Coodesh](https://coodesh.com)
